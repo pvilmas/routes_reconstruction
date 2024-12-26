@@ -1,0 +1,8 @@
+Título: Reescritura de código desde Python a C++ del módulo route_reconstruction.py del software de simulación de tráfico SUMO
+Objetivo: Reescribir el módulo route_reconstruction.py del software de simulación de tráfico SUMO, actualmente escrito en Python, a C++ para mejorar la eficiencia computacional del software.  
+Descripción: El módulo route_reconstruction.py del software de simulación de tráfico SUMO es un módulo que se encarga de recortar rutas predefinidas dada una partición en subzonas de una zona más grande. Actualmente, este módulo está escrito en Python, lo que hace que el software sea menos eficiente computacionalmente. Por lo tanto, se propone reescribir este módulo en C++ para mejorar la eficiencia computacional del software.
+Palabras clave: ver archivo keywords.txt
+Colaboración: Pablo Villar  
+Fecha de inicio: 2024-12-26  
+Fecha de finalización: 2025-01-31 (estimada)  
+Estado: Iniciando
