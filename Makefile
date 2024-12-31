@@ -1,8 +1,8 @@
 CC = g++
 
 # compile command to compile route_reconstruction.cpp
-compile: route_reconstruction.cpp
-	$(CC) -o route_reconstruction.out route_reconstruction.cpp
+compile: route_reconstruction.cpp util.cpp
+	$(CC) -o route_reconstruction.out route_reconstruction.cpp util.cpp
 
 # execute the program
 run: route_reconstruction.out
