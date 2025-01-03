@@ -6,11 +6,11 @@
 
 void TestParseRoutesFromXML() {
     // Test 1: parseRoutesFromXML should return an empty map when the file is empty
-    std::map<std::string, std::string> map_vehicles_routes = parseRoutesFromXML("test_routes/empty.rou.xml");
+    std::map<std::string, std::string> map_vehicles_routes = parseRoutesFromXML("test/test_routes/empty.rou.xml");
     assert(("An empty XML returns an empty map", map_vehicles_routes.empty()));
 
     // Test 2: parseRoutesFromXML should return a map with the correct number of vehicles
-    map_vehicles_routes = parseRoutesFromXML("test_routes/test_route.rou.xml");
+    map_vehicles_routes = parseRoutesFromXML("test/test_routes/test_route.rou.xml");
     assert(("The map should have the correct number of vehicles", map_vehicles_routes.size() == 7));
 
     std::map<std::string, std::string> expected_map_vehicles_routes = {
