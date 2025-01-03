@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <string>
 #include "util.h"
 
 int main(int argc, char *argv[]){
@@ -10,15 +11,16 @@ int main(int argc, char *argv[]){
     }
 
     // store paths in variables
-    char* output_path = argv[1];
-    char* original_path = argv[2];
+    std::string output_path = argv[1];
+    std::string original_path = argv[2];
     char* partition_paths = argv[3];
 
     // split partition paths by space and store them in an array of strings
     char* partition_path = strtok(partition_paths, " ");
+    std::string str(partition_path);
 
     // assing routes to vehicles from xml
-    std::map<char*, char*> map_vehicles_routes = parse_routes_from_xml(original_path);
+    std::map<std::string, std::string> map_vehicles_routes = parseRoutesFromXML(original_path);
 
     return 0;
 }

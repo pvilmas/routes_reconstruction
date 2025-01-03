@@ -1,6 +1,7 @@
 #include "util.h"
+#include <string>
 
-std::map<char*, char*> parseRoutesFromXML(char* filename){
-    std::map<char*, char*> map_vehicles_routes;
+std::map<std::string, std::string> parseRoutesFromXML(std::string filename){
+    std::map<std::string, std::string> map_vehicles_routes;
     return map_vehicles_routes;
 }
