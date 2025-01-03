@@ -1,9 +1,17 @@
 CC = g++
 
 # compile command to compile route_reconstruction.cpp
-compile: route_reconstruction.cpp util.cpp
-	$(CC) -o route_reconstruction.out route_reconstruction.cpp util.cpp
+compile: src/routeReconstruction.cpp src/util.cpp
+	$(CC) -o src/routeReconstruction.out src/routeReconstruction.cpp src/util.cpp
 
 # execute the program
-run: route_reconstruction.out
-	./route_reconstruction.out output.json villadecans.rou.xml "partition_0.rou.xml partition_1.rou.xml partition_2.rou.xml partition_3.rou.xml partition_4.rou.xml"
+run: src/route_reconstruction.out
+	./src/route_reconstruction.out routes/output.json routes/villadecans.rou.xml "routes/partition_0.rou.xml routes/partition_1.rou.xml routes/partition_2.rou.xml routes/partition_3.rou.xml routes/partition_4.rou.xml"
+
+# compile tests
+test: test/utilTest.cpp src/util.cpp
+	$(CC) -o test/utilTest.out test/utilTest.cpp src/util.cpp
+
+# run tests
+test_run: test/utilTest.out
+	./test/utilTest.out
