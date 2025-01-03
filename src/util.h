@@ -7,3 +7,4 @@
  * @return: index of the element if found, -1 otherwise
  */
 int binary_search(int *v, int n, int x);
+

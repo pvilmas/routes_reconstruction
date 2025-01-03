@@ -1,19 +1,21 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "util.h"
 
 int main(int argc, char *argv[]){
     if(argc < 4){
-        std::cout << "Use: ./route_reconstruction.out <output.json> <original.rou.xml> \"<partition1.rou.xml> ...\"" << std::endl;
+        std::cout << "Use: ./src/route_reconstruction.out <./routes/output.json> <./routes/original.rou.xml> \"<./routes/partition1.rou.xml> ...\"" << std::endl;
         return 1;
     }
 
-    int v[10] = {7, 10, 11, 22, 25, 30, 33, 40, 45, 50};
+    // store paths in variables
+    char* output_path = argv[1];
+    char* original_path = argv[2];
+    char* partition_paths = argv[3];
 
-    int index = binary_search(v, 10, 45);
-
-    if(index != -1) std::cout << "Element found at index " << index << std::endl;
-    else std::cout << "Element not found" << std::endl;
-
+    // split partition paths by space and store them in an array of strings
+    char* partition_path = strtok(partition_paths, " ");
+    
     return 0;
 }
