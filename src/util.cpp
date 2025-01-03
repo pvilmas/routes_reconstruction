@@ -1,6 +1,6 @@
 #include "util.h"
 
-int binary_search(int *v, int n, int x){
+int binarySearch(int *v, int n, int x){
     int l = 0, r = n - 1;
     while(l <= r){
         int m = (l + r) / 2;
@@ -9,4 +9,10 @@ int binary_search(int *v, int n, int x){
         else r = m - 1;
     }
     return -1;
+}
+
+std::map<char*, char*> parse_routes_from_xml(char* filename){
+    std::map<char*, char*> map_vehicles_routes;
+    
+    
 }

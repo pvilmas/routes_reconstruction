@@ -16,6 +16,9 @@ int main(int argc, char *argv[]){
 
     // split partition paths by space and store them in an array of strings
     char* partition_path = strtok(partition_paths, " ");
-    
+
+    // assing routes to vehicles from xml
+    std::map<char*, char*> map_vehicles_routes = parse_routes_from_xml(original_path);
+
     return 0;
 }
