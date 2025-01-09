@@ -4,6 +4,19 @@
 #include "../src/util.h"
 #include "./utilTest.h"
 
+void TestSplit() {
+    // Test 1: split should return a vector with one element when the delimiter is not found
+    std::vector<std::string> tokens = split("test", ",");
+    assert(("A string without the delimiter should return a vector with one element", tokens.size() == 1));
+
+    // Test 2: split should return a vector with the correct number of elements
+    tokens = split("test,test,test", ",");
+    assert(("A string with the delimiter should return a vector with the correct number of elements", tokens.size() == 3));
+
+    // Test 3: split should return a vector with the correct elements
+    assert(("A string with the delimiter should return a vector with the correct elements", tokens[0] == "test" && tokens[1] == "test" && tokens[2] == "test"));
+}
+
 void TestParseRoutesFromXML() {
     // Test 1: parseRoutesFromXML should return an empty map when the file is empty
     std::map<std::string, std::string> map_vehicles_routes = parseRoutesFromXML("test/test_routes/empty.rou.xml");
@@ -66,11 +79,12 @@ void TestAlignSegmentsToPartitions() {
         }
     }
 
-    std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["1"], " "), edge_to_partition);
+    //std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["3"], " "), edge_to_partition);
 }
 
 int main() {
 
+    TestSplit();
     TestParseRoutesFromXML();
     TestAlignSegmentsToPartitions();
 
