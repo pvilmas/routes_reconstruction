@@ -32,12 +32,47 @@ void TestParseRoutesFromXML() {
 }
 
 void TestAlignSegmentsToPartitions() {
-    
+    std::map<std::string, std::string> one_vehicle = parseRoutesFromXML("test/test_routes/one_vehicle_test.rou.xml");
+    std::map<int, std::map<std::string, std::string>> partitioned_routes;  
+    std::vector<std::string> partition_files = {
+        "routes/partition_0.rou.xml",
+        "routes/partition_1.rou.xml",
+        "routes/partition_2.rou.xml",
+        "routes/partition_3.rou.xml",
+        "routes/partition_4.rou.xml",
+    };
+
+    //iterate over partition_files
+    for (int i = 0; i < partition_files.size(); i++) {
+        partitioned_routes[i] = parseRoutesFromXML(partition_files[i]);
+    }
+
+    std::map<std::string, std::set<std::string>> edge_to_partition;
+    for (auto i : partitioned_routes) {
+        int partition_id = i.first;
+        std::map<std::string, std::string> vehicles = i.second;
+        for (auto j : vehicles) {
+            std::string vehicle_id = j.first;
+            std::string edges = j.second;
+            std::vector<std::string> list_edges = split(edges, " ");
+            for (auto edge : list_edges) {
+                // if edge not in edge_to_partition, add it with an empty set
+                if (edge_to_partition.find(edge) == edge_to_partition.end()) {
+                    edge_to_partition[edge] = std::set<std::string>();
+                }
+                // add the partition_id to the set of partitions for the edge
+                edge_to_partition[edge].insert(std::to_string(partition_id));
+            }
+        }
+    }
+
+    std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["1"], " "), edge_to_partition);
 }
 
 int main() {
 
     TestParseRoutesFromXML();
+    TestAlignSegmentsToPartitions();
 
     std::cout << "All tests passed successfully!" << std::endl;
     return 0;

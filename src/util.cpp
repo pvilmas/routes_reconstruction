@@ -3,6 +3,21 @@
 #include "util.h"
 #include "../libs/pugixml-1.14/src/pugixml.hpp"
 
+std::vector<std::string> split(std::string s, std::string delimiter) {
+    std::vector<std::string> tokens;
+    size_t pos = 0;
+    std::string token;
+    
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        tokens.push_back(token);
+        s.erase(0, pos + delimiter.length());
+    }
+    tokens.push_back(s);
+
+    return tokens;
+}
+
 std::map<std::string, std::string> parseRoutesFromXML(std::string filename){
     // create an empty map to store the vehicles and their routes
     std::map<std::string, std::string> map_vehicles_routes;

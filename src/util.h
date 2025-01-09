@@ -23,3 +23,11 @@ std::map<std::string, std::string> parseRoutesFromXML(std::string filename);
  * @return a std::vector<Segment> containing the aligned segments.
  */
 std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vector<std::string> original_edge_list, std::map<std::string, std::set<std::string>> edge_to_partition);
+
+/* Split a string into a vector of strings based on a delimiter. 
+ * 
+ * @param s a std::string containing the string to split.
+ * @param delimiter a std::string containing the delimiter to split the string by.
+ * @return a std::vector<std::string> containing the split strings.
+ */
+std::vector<std::string> split(std::string s, std::string delimiter);
