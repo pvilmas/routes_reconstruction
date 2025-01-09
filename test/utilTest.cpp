@@ -31,6 +31,10 @@ void TestParseRoutesFromXML() {
     }
 }
 
+void TestAlignSegmentsToPartitions() {
+    
+}
+
 int main() {
 
     TestParseRoutesFromXML();
