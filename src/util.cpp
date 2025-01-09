@@ -57,5 +57,42 @@ std::map<std::string, std::string> parseRoutesFromXML(std::string filename){
 }
 
 std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vector<std::string> original_edge_list, std::map<std::string, std::set<std::string>> edge_to_partition) {
-    return std::vector<Segment>();
+    
+    std::vector<Segment> aligned_segments;
+    std::string current_partition_id = "";
+    std::vector<std::string> current_segment;
+
+    for (std::string edge : original_edge_list) {
+        std::set<std::string> partitions = edge_to_partition[edge];
+        
+        // if the edge does not belong to any partition
+        // print a warning and skip the edge
+        if (partitions.empty()) {
+            std::cerr << "Warning: Edge " << edge << " for vehicle " << vehicle_id << " not found in any partition." << std::endl;
+            continue;
+        }
+
+        // if there is no current partition, assign the first partition to the current partition
+        if (current_partition_id == "") {
+            current_partition_id = *partitions.begin();
+        }
+
+        // if the current partition is not in the set of partitions for the edge
+        // add the current segment to the aligned segments and start a new segment
+        if (partitions.find(current_partition_id) == partitions.end()) {
+            aligned_segments.push_back(std::make_pair(current_partition_id, current_segment));
+            current_partition_id = *partitions.begin();
+            current_segment.clear();
+        }
+
+        // add the edge to the current segment
+        current_segment.push_back(edge);
+    }
+
+    // add the last segment to the aligned segments
+    if (!current_segment.empty()) {
+        aligned_segments.push_back(std::make_pair(current_partition_id, current_segment));
+    }
+
+    return aligned_segments;
 }

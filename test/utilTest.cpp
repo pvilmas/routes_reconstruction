@@ -81,7 +81,7 @@ void TestAlignSegmentsToPartitions() {
         }
     }
 
-    std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["3"], " "), edge_to_partition);
+    std::vector<Segment> aligned_segments = alignSegmentsToPartitions("3", split(one_vehicle["3"], " "), edge_to_partition);
 
     // Expected segments
     std::pair<std::string, std::vector<std::string>> partition_0;
