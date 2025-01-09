@@ -55,3 +55,7 @@ std::map<std::string, std::string> parseRoutesFromXML(std::string filename){
 
     return map_vehicles_routes;
 }
+
+std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vector<std::string> original_edge_list, std::map<std::string, std::set<std::string>> edge_to_partition) {
+    return std::vector<Segment>();
+}

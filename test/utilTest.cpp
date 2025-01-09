@@ -1,6 +1,8 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <utility>
+#include <vector>
 #include "../src/util.h"
 #include "./utilTest.h"
 
@@ -79,7 +81,25 @@ void TestAlignSegmentsToPartitions() {
         }
     }
 
-    //std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["3"], " "), edge_to_partition);
+    std::vector<Segment> aligned_segments = alignSegmentsToPartitions("1", split(one_vehicle["3"], " "), edge_to_partition);
+
+    // Expected segments
+    std::pair<std::string, std::vector<std::string>> partition_0;
+    partition_0.first = "0";
+    partition_0.second = {"96617277#1", "96617277#2", "96614421#1", "96616040#0", "96616040#1", "539700922#0", "96617272#0", "96617272#1", "96617273", "-204331653#4", "96617275#0", "97680600#0", "97680600#1", "97678824#0", "97678824#1", "97678824#2", "97678824#3", "97678824#4", "97678824#5", "97678824#6", "97678824#7", "-97675054#8", "-97675054#7", "97772830#2", "97772830#3", "97772828#1", "1029856084#3", "539700920#0", "539700920#1", "539700920#2", "539700920#3", "20026755", "540513236", "-540714693#3", "-540714693#2", "-540714693#1", "-540714693#0", "540714692#0", "540714692#1", "540714692#2"};
+    std::pair<std::string, std::vector<std::string>> partition_2;
+    partition_2.first = "2";
+    partition_2.second = {"-154766475#1", "-154766475#0", "540512678", "154766483#0", "154766483#1", "1018466676", "154766476#0", "154766476#1", "154766476#2", "540714689", "154766496#0", "154766496#1", "154766496#2", "564116377", "383315646#0", "383315646#1", "383315646#2", "383315646#3", "383315646#4", "540714687", "540714686", "540512681", "564116378#0", "564116378#1", "437519467#0", "437519467#1", "437519467#2", "437519467#3", "437519467#4", "437519467#5", "-154766478#2", "-154766478#1", "-154766478#0"};
+
+    std::vector<Segment> expected_aligned_segments = {partition_0, partition_2};
+
+    // Test 1: alignSegmentsToPartitions should return a vector with the correct number of segments
+    assert(("The function should return a vector with the correct number of segments", aligned_segments.size() == expected_aligned_segments.size()));
+
+    // Test 2: alignSegmentsToPartitions should return a vector with the correct segments
+    for (int i = 0; i < aligned_segments.size(); i++) {
+        assert(("The function should return a vector with the correct segments", aligned_segments[i].first == expected_aligned_segments[i].first && aligned_segments[i].second == expected_aligned_segments[i].second));
+    }
 }
 
 int main() {
