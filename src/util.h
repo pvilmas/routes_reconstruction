@@ -6,6 +6,8 @@
 // Define the type for a segment (partition ID and list of edges)
 typedef std::pair<std::string, std::vector<std::string>> Segment;
 
+typedef std::pair<std::string, std::vector<std::map<std::string, std::string>>> ReconstructedVehicleRoute;
+
 /*
  * Parse vehicle routes from a .rou.xml file.
  * 
@@ -31,3 +33,10 @@ std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vect
  * @return a std::vector<std::string> containing the split strings.
  */
 std::vector<std::string> split(std::string s, std::string delimiter);
+
+/* Reconstruction of the vehicle routes based on the partitioned routes.
+ * @param original_routes a std::map<std::string, std::string> containing the original routes.
+ * @param partitioned_routes a std::map<int, std::map<std::string, std::string>> containing the partitioned routes.
+ * @return a std::pair<std::string, std::vector<std::map<std::string, std::string>>> containing the reconstructed vehicle routes.
+ */
+ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes);

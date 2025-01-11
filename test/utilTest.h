@@ -13,3 +13,8 @@ void TestParseRoutesFromXML();
  * Test the aligning of segments to partitions
  */
 void TestAlignSegmentsToPartitions();
+
+/*
+ * Test the reconstruction of vehicle routes
+ */
+void TestRecosntructRoutes();

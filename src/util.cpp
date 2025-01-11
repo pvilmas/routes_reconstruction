@@ -96,3 +96,7 @@ std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vect
 
     return aligned_segments;
 }
+
+ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes) {
+    return std::make_pair("test", std::vector<std::map<std::string, std::string>>());
+}
