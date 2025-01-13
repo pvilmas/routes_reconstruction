@@ -117,6 +117,8 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
         }
     }
 
+    ReconstructedVehicleRoute reconstructed_routes;
+
     // first iterate over the original routes map
     for (auto i : original_routes) {
         std::string vehicle_id = i.first;
@@ -127,6 +129,51 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
         std::vector<Segment> segments = alignSegmentsToPartitions(vehicle_id, original_edges_list, edge_to_partition);
 
         // store the reconstructed route
-        
+        std::vector<std::map<std::string, std::string>> cut_routes;
+
+        // iterate over the segments
+        int j = 0;
+        for (Segment segment : segments) {
+            std::string next_partition = "-1";
+            std::string next_route = "";
+            
+            // if the segment is not the last one
+            if (j < segments.size() - 1) {
+                next_partition = segments[j + 1].first;
+                for (std::string edge : segments[j + 1].second) {
+                    next_route += edge + " ";
+                }
+                // remove the last space
+                next_route.pop_back();
+            }
+
+            std::string partition_id = segment.first;
+            std::vector<std::string> edges = segment.second;
+            std::string cut_route = "";
+            for (std::string edge : edges) {
+                cut_route += edge + " ";
+            }
+            //remove the last space
+            cut_route.pop_back();
+
+            // store the partition ID, vehicle ID, cut route, next partition, and next route
+            std::map<std::string, std::string> partition_route = {
+                {"partition", partition_id},
+                {"id", vehicle_id},
+                {"cut_route", cut_route},
+                {"next_partition", next_partition},
+                {"next_route", next_route}
+            };
+
+            // add the partition route to the cut routes
+            cut_routes.push_back(partition_route);
+
+            j++;
+        }
+
+        // store the reconstructed vehicle route
+        reconstructed_routes.push_back(std::make_pair(original_edges, cut_routes));
     }
+
+    return reconstructed_routes;
 }
