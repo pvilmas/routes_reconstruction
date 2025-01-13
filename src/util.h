@@ -6,7 +6,7 @@
 // Define the type for a segment (partition ID and list of edges)
 typedef std::pair<std::string, std::vector<std::string>> Segment;
 
-typedef std::pair<std::string, std::vector<std::map<std::string, std::string>>> ReconstructedVehicleRoute;
+typedef std::vector<std::pair<std::string, std::vector<std::map<std::string, std::string>>>> ReconstructedVehicleRoute;
 
 /*
  * Parse vehicle routes from a .rou.xml file.

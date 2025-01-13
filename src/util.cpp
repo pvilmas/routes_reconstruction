@@ -98,5 +98,35 @@ std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vect
 }
 
 ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes) {
-    return std::make_pair("test", std::vector<std::map<std::string, std::string>>());
+    std::map<std::string, std::set<std::string>> edge_to_partition;
+    for (auto i : partitioned_routes) {
+        int partition_id = i.first;
+        std::map<std::string, std::string> vehicles = i.second;
+        for (auto j : vehicles) {
+            std::string vehicle_id = j.first;
+            std::string edges = j.second;
+            std::vector<std::string> list_edges = split(edges, " ");
+            for (auto edge : list_edges) {
+                // if edge not in edge_to_partition, add it with an empty set
+                if (edge_to_partition.find(edge) == edge_to_partition.end()) {
+                    edge_to_partition[edge] = std::set<std::string>();
+                }
+                // add the partition_id to the set of partitions for the edge
+                edge_to_partition[edge].insert(std::to_string(partition_id));
+            }
+        }
+    }
+
+    // first iterate over the original routes map
+    for (auto i : original_routes) {
+        std::string vehicle_id = i.first;
+        std::string original_edges = i.second;
+        std::vector<std::string> original_edges_list = split(original_edges, " ");
+        
+        // align the segments to the partitions
+        std::vector<Segment> segments = alignSegmentsToPartitions(vehicle_id, original_edges_list, edge_to_partition);
+
+        // store the reconstructed route
+        
+    }
 }
