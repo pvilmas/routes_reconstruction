@@ -3,8 +3,12 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <fstream>
 #include "../src/util.h"
 #include "./utilTest.h"
+
+#include "../libs/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 void TestSplit() {
     // Test 1: split should return a vector with one element when the delimiter is not found
@@ -102,7 +106,7 @@ void TestAlignSegmentsToPartitions() {
     }
 }
 
-void TestRecosntructRoutes() {
+void TestReconstructRoutes() {
     std::map<std::string, std::string> one_vehicle = parseRoutesFromXML("test/test_routes/one_vehicle_test.rou.xml");
     std::map<int, std::map<std::string, std::string>> partitioned_routes;  
     std::vector<std::string> partition_files = {
@@ -142,12 +146,43 @@ void TestRecosntructRoutes() {
     assert(("Partition 2 should have the correct values", partition_2["partition"] == "2" && partition_2["id"] == "3" && partition_2["cut_route"] == expected_partition_2_cut_route && partition_2["next_partition"] == "-1" && partition_2["next_route"] == expected_partition_2_next_route));
 }
 
+void TestSaveToJson() {
+    std::map<std::string, std::string> one_vehicle = parseRoutesFromXML("test/test_routes/one_vehicle_test.rou.xml");
+    std::map<int, std::map<std::string, std::string>> partitioned_routes;  
+    std::vector<std::string> partition_files = {
+        "routes/partition_0.rou.xml",
+        "routes/partition_1.rou.xml",
+        "routes/partition_2.rou.xml",
+        "routes/partition_3.rou.xml",
+        "routes/partition_4.rou.xml",
+    };
+
+    //iterate over partition_files
+    for (int i = 0; i < partition_files.size(); i++) {
+        partitioned_routes[i] = parseRoutesFromXML(partition_files[i]);
+    }
+
+    ReconstructedVehicleRoute reconstructed_routes = reconstructRoutes(one_vehicle, partitioned_routes);
+
+    saveToJson(reconstructed_routes, "test/test_routes/reconstructed_routes.json");
+
+    std::ifstream reconstructed_routes_file("test/test_routes/reconstructed_routes.json");
+    json reconstructed_routes_json = json::parse(reconstructed_routes_file);
+
+    // Test 1: saveToJson should save the correct key
+    assert(("The function should save the correct key", reconstructed_routes_json.contains("routes")));
+
+    //Test 2: saveToJson should save the correct number of routes
+    assert(("The function should save the correct number of routes", reconstructed_routes_json["routes"].size() == 1));
+}
+
 int main() {
 
     TestSplit();
     TestParseRoutesFromXML();
     TestAlignSegmentsToPartitions();
-    TestRecosntructRoutes();
+    TestReconstructRoutes();
+    TestSaveToJson();
 
     std::cout << "All tests passed successfully!" << std::endl;
     return 0;

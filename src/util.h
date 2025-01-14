@@ -40,3 +40,10 @@ std::vector<std::string> split(std::string s, std::string delimiter);
  * @return a std::pair<std::string, std::vector<std::map<std::string, std::string>>> containing the reconstructed vehicle routes.
  */
 ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes);
+
+
+/* Save data to a JSON file.
+ * @param data a ReconstructedVehicleRoute containing the data to save.
+ * @param filename a std::string containing the path to the JSON file.
+ */
+void saveToJson(ReconstructedVehicleRoute data, std::string filename);

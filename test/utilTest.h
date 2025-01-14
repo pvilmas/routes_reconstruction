@@ -17,4 +17,9 @@ void TestAlignSegmentsToPartitions();
 /*
  * Test the reconstruction of vehicle routes
  */
-void TestRecosntructRoutes();
+void TestReconstructRoutes();
+
+/*
+ * Test the save to JSON function
+ */
+void TestSaveToJson();
