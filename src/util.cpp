@@ -1,7 +1,11 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "util.h"
 #include "../libs/pugixml-1.14/src/pugixml.hpp"
+
+#include "../libs/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 std::vector<std::string> split(std::string s, std::string delimiter) {
     std::vector<std::string> tokens;
@@ -176,4 +180,48 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
     }
 
     return reconstructed_routes;
+}
+
+void saveToJson(ReconstructedVehicleRoute data, std::string filename) {
+    // create a json object
+    json reconstruct_routes_json;
+
+    // for each pair of original route and cut routes 
+    for (auto i : data) {
+        std::string original_route = i.first;
+        std::vector<std::map<std::string, std::string>> cut_routes = i.second;
+
+        // create a json object for the original route
+        json route_json;
+        route_json["original_route"] = original_route;
+
+        // create a json array for the cut routes
+        json cut_routes_json;
+        for (auto j : cut_routes) {
+            std::string partition = j["partition"];
+            std::string id = j["id"];
+            std::string cut_route = j["cut_route"];
+            std::string next_partition = j["next_partition"];
+            std::string next_route = j["next_route"];
+
+            // create a json object for the cut route
+            json cut_route_json;
+            cut_route_json["partition"] = std::stoi(partition);
+            cut_route_json["id"] = id;
+            cut_route_json["cut_route"] = cut_route;
+            cut_route_json["next_partition"] = std::stoi(next_partition);
+            cut_route_json["next_route"] = next_route;
+
+            // add the cut route to the cut routes json array
+            cut_routes_json.push_back(cut_route_json);
+        }
+
+        // add the original route and cut routes to the reconstruct routes json object
+        route_json["cut_routes"] = cut_routes_json;
+        reconstruct_routes_json["routes"].push_back(route_json);
+    }
+
+    // write the json object to a file
+    std::ofstream file(filename);
+    file << reconstruct_routes_json.dump(4);
 }
