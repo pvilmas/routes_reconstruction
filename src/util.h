@@ -3,10 +3,11 @@
 #include <vector>
 #include <set>
 
+#include "../libs/nlohmann/json.hpp"
+using json = nlohmann::json;
+
 // Define the type for a segment (partition ID and list of edges)
 typedef std::pair<std::string, std::vector<std::string>> Segment;
-
-typedef std::vector<std::pair<std::string, std::vector<std::map<std::string, std::string>>>> ReconstructedVehicleRoute;
 
 /*
  * Parse vehicle routes from a .rou.xml file.
@@ -37,13 +38,13 @@ std::vector<std::string> split(std::string s, std::string delimiter);
 /* Reconstruction of the vehicle routes based on the partitioned routes.
  * @param original_routes a std::map<std::string, std::string> containing the original routes.
  * @param partitioned_routes a std::map<int, std::map<std::string, std::string>> containing the partitioned routes.
- * @return a std::pair<std::string, std::vector<std::map<std::string, std::string>>> containing the reconstructed vehicle routes.
+ * @return a JSON containing the reconstructed vehicle routes.
  */
-ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes);
+json reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes);
 
 
 /* Save data to a JSON file.
- * @param data a ReconstructedVehicleRoute containing the data to save.
+ * @param data a json containing the data to save.
  * @param filename a std::string containing the path to the JSON file.
  */
-void saveToJson(ReconstructedVehicleRoute data, std::string filename);
+void saveToJson(json data, std::string filename);

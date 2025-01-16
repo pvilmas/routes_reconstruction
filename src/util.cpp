@@ -101,7 +101,7 @@ std::vector<Segment> alignSegmentsToPartitions(std::string vehicle_id, std::vect
     return aligned_segments;
 }
 
-ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes) {
+json reconstructRoutes(std::map<std::string, std::string> original_routes, std::map<int, std::map<std::string, std::string>> partitioned_routes) {
     std::map<std::string, std::set<std::string>> edge_to_partition;
     for (auto i : partitioned_routes) {
         int partition_id = i.first;
@@ -121,7 +121,7 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
         }
     }
 
-    ReconstructedVehicleRoute reconstructed_routes;
+    json reconstructed_routes;
 
     // first iterate over the original routes map
     for (auto i : original_routes) {
@@ -133,7 +133,7 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
         std::vector<Segment> segments = alignSegmentsToPartitions(vehicle_id, original_edges_list, edge_to_partition);
 
         // store the reconstructed route
-        std::vector<std::map<std::string, std::string>> cut_routes;
+        json cut_routes;
 
         // iterate over the segments
         int j = 0;
@@ -161,11 +161,11 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
             cut_route.pop_back();
 
             // store the partition ID, vehicle ID, cut route, next partition, and next route
-            std::map<std::string, std::string> partition_route = {
-                {"partition", partition_id},
+            json partition_route = {
+                {"partition", std::stoi(partition_id)},
                 {"id", vehicle_id},
                 {"cut_route", cut_route},
-                {"next_partition", next_partition},
+                {"next_partition", std::stoi(next_partition)},
                 {"next_route", next_route}
             };
 
@@ -176,52 +176,20 @@ ReconstructedVehicleRoute reconstructRoutes(std::map<std::string, std::string> o
         }
 
         // store the reconstructed vehicle route
-        reconstructed_routes.push_back(std::make_pair(original_edges, cut_routes));
+        json vehicle_route = {
+            {"original_route", original_edges},
+            {"cut_routes", cut_routes}
+        };
+
+        // add the vehicle route to the reconstructed routes
+        reconstructed_routes["routes"].push_back(vehicle_route);
     }
 
     return reconstructed_routes;
 }
 
-void saveToJson(ReconstructedVehicleRoute data, std::string filename) {
-    // create a json object
-    json reconstruct_routes_json;
-
-    // for each pair of original route and cut routes 
-    for (auto i : data) {
-        std::string original_route = i.first;
-        std::vector<std::map<std::string, std::string>> cut_routes = i.second;
-
-        // create a json object for the original route
-        json route_json;
-        route_json["original_route"] = original_route;
-
-        // create a json array for the cut routes
-        json cut_routes_json;
-        for (auto j : cut_routes) {
-            std::string partition = j["partition"];
-            std::string id = j["id"];
-            std::string cut_route = j["cut_route"];
-            std::string next_partition = j["next_partition"];
-            std::string next_route = j["next_route"];
-
-            // create a json object for the cut route
-            json cut_route_json;
-            cut_route_json["partition"] = std::stoi(partition);
-            cut_route_json["id"] = id;
-            cut_route_json["cut_route"] = cut_route;
-            cut_route_json["next_partition"] = std::stoi(next_partition);
-            cut_route_json["next_route"] = next_route;
-
-            // add the cut route to the cut routes json array
-            cut_routes_json.push_back(cut_route_json);
-        }
-
-        // add the original route and cut routes to the reconstruct routes json object
-        route_json["cut_routes"] = cut_routes_json;
-        reconstruct_routes_json["routes"].push_back(route_json);
-    }
-
+void saveToJson(json data, std::string filename) {
     // write the json object to a file
     std::ofstream file(filename);
-    file << reconstruct_routes_json.dump(4);
+    file << data.dump(4);
 }

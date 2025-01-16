@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
     }
 
     // reconstruct routes
-    ReconstructedVehicleRoute reconstructed_routes = reconstructRoutes(original_routes, partitioned_routes);
+    json reconstructed_routes = reconstructRoutes(original_routes, partitioned_routes);
 
     // save reconstructed routes to json
     saveToJson(reconstructed_routes, output_file);
