@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import json 
 import sys
+import time
 
 def parse_routes_from_xml(filename:str) -> dict:
     """
@@ -131,6 +132,9 @@ def save_to_json(data:dict, filename:str) -> None:
         print(f'Error saving JSON file {filename}: {e}')
 
 if __name__ == "__main__":
+    # register initial time
+    start_time = time.time()
+
     if len(sys.argv) < 4:
         print("Usage python3 route_reconstruction.py <output.json> <original.rou.xml> [<partition1.rou.xml> ...]")
         sys.exit(1)
@@ -150,3 +154,7 @@ if __name__ == "__main__":
     save_to_json(reconstructed_routes, output_file)
 
     print(f'Reconstructed routes saved successfully to {output_file}.')
+
+    # save execution time to a file
+    with open("python_time.txt", "w") as file:
+        file.write(f'{time.time() - start_time:.3f} seconds')
