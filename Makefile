@@ -1,8 +1,8 @@
 CC = g++
 
 # compile command to compile route_reconstruction.cpp
-compile: src/routeReconstruction.cpp src/util.cpp libs/pugixml-1.14/src/pugixml.cpp
-	$(CC) -o src/routeReconstruction.out src/routeReconstruction.cpp src/util.cpp libs/pugixml-1.14/src/pugixml.cpp
+compile: src/routeReconstruction.cpp src/util.cpp libs/pugixml-1.14/src/pugixml.cpp libs/nlohmann/json.hpp
+	$(CC) -o src/routeReconstruction.out src/routeReconstruction.cpp src/util.cpp libs/pugixml-1.14/src/pugixml.cpp libs/nlohmann/json.hpp
 
 # execute the program
 run: src/routeReconstruction.out
