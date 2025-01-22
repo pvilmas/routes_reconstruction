@@ -1,1 +1,1 @@
-2.428 seconds
+0.744 seconds
