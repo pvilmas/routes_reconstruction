@@ -122,28 +122,28 @@ void TestReconstructRoutes() {
         partitioned_routes[i] = parseRoutesFromXML(partition_files[i]);
     }
 
-    ReconstructedVehicleRoute reconstructed_routes = reconstructRoutes(one_vehicle, partitioned_routes);
+    json reconstructed_routes = reconstructRoutes(one_vehicle, partitioned_routes);
 
     // Test 1: reconstructRoutes should return a pair with the first element being the correct original route
     std::string correct_original_route = "96617277#1 96617277#2 96614421#1 96616040#0 96616040#1 539700922#0 96617272#0 96617272#1 96617273 -204331653#4 96617275#0 97680600#0 97680600#1 97678824#0 97678824#1 97678824#2 97678824#3 97678824#4 97678824#5 97678824#6 97678824#7 -97675054#8 -97675054#7 97772830#2 97772830#3 97772828#1 1029856084#3 539700920#0 539700920#1 539700920#2 539700920#3 20026755 540513236 -540714693#3 -540714693#2 -540714693#1 -540714693#0 540714692#0 540714692#1 540714692#2 -154766475#2 -154766475#1 -154766475#0 540512678 154766483#0 154766483#1 1018466676 154766476#0 154766476#1 154766476#2 540714689 154766496#0 154766496#1 154766496#2 564116377 383315646#0 383315646#1 383315646#2 383315646#3 383315646#4 540714687 540714686 540512681 564116378#0 564116378#1 437519467#0 437519467#1 437519467#2 437519467#3 437519467#4 437519467#5 -154766478#2 -154766478#1 -154766478#0";
-    assert(("The function should return a pair with the correct original route", reconstructed_routes[0].first == correct_original_route));
+    assert(("The function should return a json with the correct original route", reconstructed_routes["routes"][0]["original_route"] == correct_original_route));
 
     // Test 2: reconstructRoutes should return a pair with the second element being a vector with the correct number of partitions
-    assert(("The function should return a pair with the correct number of partitions", reconstructed_routes[0].second.size() == 2));
+    assert(("The function should return a json with the correct number of partitions", reconstructed_routes["routes"][0]["cut_routes"].size() == 2));
 
     //Test 3: reconstructRoutes should return a pair with the second element being a vector with the correct partitions
-    std::map<std::string, std::string> partition_0 = reconstructed_routes[0].second[0];
-    std::map<std::string, std::string> partition_2 = reconstructed_routes[0].second[1];
+    json partition_0 = reconstructed_routes["routes"][0]["cut_routes"][0];
+    json partition_2 = reconstructed_routes["routes"][0]["cut_routes"][1];
 
     std::string expected_partition_0_cut_route = "96617277#1 96617277#2 96614421#1 96616040#0 96616040#1 539700922#0 96617272#0 96617272#1 96617273 -204331653#4 96617275#0 97680600#0 97680600#1 97678824#0 97678824#1 97678824#2 97678824#3 97678824#4 97678824#5 97678824#6 97678824#7 -97675054#8 -97675054#7 97772830#2 97772830#3 97772828#1 1029856084#3 539700920#0 539700920#1 539700920#2 539700920#3 20026755 540513236 -540714693#3 -540714693#2 -540714693#1 -540714693#0 540714692#0 540714692#1 540714692#2";
     std::string expected_partition_0_next_route = "-154766475#1 -154766475#0 540512678 154766483#0 154766483#1 1018466676 154766476#0 154766476#1 154766476#2 540714689 154766496#0 154766496#1 154766496#2 564116377 383315646#0 383315646#1 383315646#2 383315646#3 383315646#4 540714687 540714686 540512681 564116378#0 564116378#1 437519467#0 437519467#1 437519467#2 437519467#3 437519467#4 437519467#5 -154766478#2 -154766478#1 -154766478#0";
 
-    assert(("Partition 0 should have the correct values", partition_0["partition"] == "0" && partition_0["id"] == "3" && partition_0["cut_route"] == expected_partition_0_cut_route && partition_0["next_partition"] == "2" && partition_0["next_route"] == expected_partition_0_next_route));
+    assert(("Partition 0 should have the correct values", partition_0["partition"] == 0 && partition_0["id"] == "3" && partition_0["cut_route"] == expected_partition_0_cut_route && partition_0["next_partition"] == 2 && partition_0["next_route"] == expected_partition_0_next_route));
 
     std::string expected_partition_2_cut_route = "-154766475#1 -154766475#0 540512678 154766483#0 154766483#1 1018466676 154766476#0 154766476#1 154766476#2 540714689 154766496#0 154766496#1 154766496#2 564116377 383315646#0 383315646#1 383315646#2 383315646#3 383315646#4 540714687 540714686 540512681 564116378#0 564116378#1 437519467#0 437519467#1 437519467#2 437519467#3 437519467#4 437519467#5 -154766478#2 -154766478#1 -154766478#0";
     std::string expected_partition_2_next_route = "";
 
-    assert(("Partition 2 should have the correct values", partition_2["partition"] == "2" && partition_2["id"] == "3" && partition_2["cut_route"] == expected_partition_2_cut_route && partition_2["next_partition"] == "-1" && partition_2["next_route"] == expected_partition_2_next_route));
+    assert(("Partition 2 should have the correct values", partition_2["partition"] == 2 && partition_2["id"] == "3" && partition_2["cut_route"] == expected_partition_2_cut_route && partition_2["next_partition"] == -1 && partition_2["next_route"] == expected_partition_2_next_route));
 }
 
 void TestSaveToJson() {
@@ -162,7 +162,7 @@ void TestSaveToJson() {
         partitioned_routes[i] = parseRoutesFromXML(partition_files[i]);
     }
 
-    ReconstructedVehicleRoute reconstructed_routes = reconstructRoutes(one_vehicle, partitioned_routes);
+    json reconstructed_routes = reconstructRoutes(one_vehicle, partitioned_routes);
 
     saveToJson(reconstructed_routes, "test/test_routes/reconstructed_routes.json");
 
